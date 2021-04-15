@@ -491,7 +491,7 @@ class VexTabTests
 
     assertEquivalent assert, "Single note with fingering",
       ":q 5/2 $.fingering/1:r:f:1.$",
-      ":q 5/2 $.fingering/1:r:f:1.$"
+      ":q 5/2[f1:r]"
 
     # Uncomment these once the above is working.
     # assertEquivalent assert, "tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:r:s:1.$", "tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:r:s:1.$"
