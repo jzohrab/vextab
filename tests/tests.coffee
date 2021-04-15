@@ -47,6 +47,7 @@ class VexTabTests
     test "Sweep Strokes", @sweepStrokes
     test "Voices", @voices
     test "Fingering and String Numbers", @fingering
+    test "Fingering and String Numbers - Simplified", @fingeringSimplified
     test "Render", @render
     test "Render Complex", @renderComplex
     test "Tab Stems", @tabStems
@@ -469,6 +470,36 @@ class VexTabTests
     assert.notEqual null, tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:b:s:1.$")
     assert.notEqual null, tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:l:f:1.$")
     assert.notEqual null, tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:r:s:1.$")
+
+    assert.ok(true, "all pass")
+
+  assertEquivalent = (assert, title, vex1, vex2) ->
+    oldmax = QUnit.dump.maxDepth
+    QUnit.dump.maxDepth = 10
+    header = "tabstave\n notes "
+    tab1 = makeParser()
+    ret1 = QUnit.dump.parse(tab1.parse(header + vex1))
+    console.log( QUnit.dump.parse( ret1 ) )
+    tab2 = makeParser()
+    ret2 = QUnit.dump.parse(tab2.parse(header + vex2))
+    QUnit.dump.maxDepth = oldmax
+    assert.equal ret1, ret2, title
+
+  @fingeringSimplified: (assert) ->
+    assert.expect 2
+    tab = makeParser()
+
+    assertEquivalent assert, "Single note with fingering",
+      ":q 5/2 $.fingering/1:r:f:1.$",
+      ":q 5/2 $.fingering/1:r:f:1.$"
+
+    # Uncomment these once the above is working.
+    # assertEquivalent assert, "tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:r:s:1.$", "tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:r:s:1.$"
+    # assert.equal tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:l:f:1.$"), tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:l:f:1.$")
+    # assert.equal tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:a:s:1.$"), tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:a:s:1.$")
+    # assert.equal tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:b:s:1.$"), tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:b:s:1.$")
+    # assert.equal tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:l:f:1.$"), tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:l:f:1.$")
+    # assert.equal tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:r:s:1.$"), tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:r:s:1.$")
 
     assert.ok(true, "all pass")
 
