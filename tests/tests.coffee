@@ -489,11 +489,11 @@ class VexTabTests
     assert.expect 2
     tab = makeParser()
 
-    assertEquivalent assert, "Single accent",
-      ":q 5/2 $.a>/top.$",
-      ":q 5/2[>:t]"
+
+    assertEquivalent assert, "Can annotate with [ ]", ":q 5/2 $.a>/top.$", ":q 5/2 [.a>/top.]"
 
     # Uncomment these once the above is working.
+    # assertEquivalent assert, "Single accent", ":q 5/2 $.a>/top.$", ":q 5/2[>:t]"
     # assertEquivalent assert, "Single note with fingering", ":q 5/2 $.fingering/1:r:f:1.$", ":q 5/2[f1:r]"
     # assertEquivalent assert, "tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:r:s:1.$", "tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:r:s:1.$"
     # assert.equal tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:l:f:1.$"), tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:l:f:1.$")
