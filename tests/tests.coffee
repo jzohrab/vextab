@@ -486,11 +486,12 @@ class VexTabTests
     assert.equal ret1, ret2, title
 
   @grammarSimplified: (assert) ->
-    assert.expect 2
+    assert.expect 3
     tab = makeParser()
 
 
     assertEquivalent assert, "Can annotate with [ ]", ":q 5/2 $.a>/top.$", ":q 5/2 [.a>/top.]"
+    assertEquivalent assert, "Square bracket annotation can come right after note", ":q 5/2 $.a>/top.$", ":q 5/2[.a>/top.]"
 
     # Uncomment these once the above is working.
     # assertEquivalent assert, "Single accent", ":q 5/2 $.a>/top.$", ":q 5/2[>:t]"
