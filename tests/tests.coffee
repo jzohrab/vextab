@@ -47,7 +47,7 @@ class VexTabTests
     test "Sweep Strokes", @sweepStrokes
     test "Voices", @voices
     test "Fingering and String Numbers", @fingering
-    test "Fingering and String Numbers - Simplified", @fingeringSimplified
+    test "Grammary - Simplified", @grammarSimplified
     test "Render", @render
     test "Render Complex", @renderComplex
     test "Tab Stems", @tabStems
@@ -485,15 +485,16 @@ class VexTabTests
     QUnit.dump.maxDepth = oldmax
     assert.equal ret1, ret2, title
 
-  @fingeringSimplified: (assert) ->
+  @grammarSimplified: (assert) ->
     assert.expect 2
     tab = makeParser()
 
-    assertEquivalent assert, "Single note with fingering",
-      ":q 5/2 $.fingering/1:r:f:1.$",
-      ":q 5/2[f1:r]"
+    assertEquivalent assert, "Single accent",
+      ":q 5/2 $.a>/top.$",
+      ":q 5/2[>:t]"
 
     # Uncomment these once the above is working.
+    # assertEquivalent assert, "Single note with fingering", ":q 5/2 $.fingering/1:r:f:1.$", ":q 5/2[f1:r]"
     # assertEquivalent assert, "tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:r:s:1.$", "tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:r:s:1.$"
     # assert.equal tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:l:f:1.$"), tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:l:f:1.$")
     # assert.equal tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:a:s:1.$"), tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:a:s:1.$")
