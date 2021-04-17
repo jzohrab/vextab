@@ -474,39 +474,49 @@ class VexTabTests
     assert.ok(true, "all pass")
 
 
-  # Generate tabular output.
-  makeRenderer2 = (test_name, test_id)->
-    test_div = $('<div></div>').addClass("testcanvas")
-    test_div.append($('<div></div>').addClass("name").text(test_name))
-    canvas = $('<div></div>').addClass("vex-tabdiv").attr('id', test_id)
-    test_div.append(canvas)
-    $("body").append(test_div)
+  makeCanvas = (heading, test_id, flex)->
+    c = $('<div></div>').addClass("name").text(heading).css('flex', flex)
+    canvas = $('<div></div>').addClass("vex-tabdiv").attr('id', test_id).css('flex', flex)
+    c.append(canvas)
+    return c
 
+  # Generate tabular output.
+  makeRenderer2 = (canvasid)->
+    canvas = $('#' + canvasid)
     renderer = new Vex.Flow.Renderer(canvas[0], Vex.Flow.Renderer.Backends.SVG)
     renderer.getContext().setBackgroundFillStyle("#eed")
     return renderer
 
-  renderTest2 = (assert, title, divid, code) ->
+  renderTest2 = (assert, canvasid, code) ->
     tab = new VexTab(new Artist(0, 0, 200, {scale: 0.8}))
-    renderer = makeRenderer2(title, divid)
+    renderer = makeRenderer2(canvasid)
     assert.notEqual null, tab.parse(code)
     tab.getArtist().render(renderer)
-    assert.ok(true, "all pass")
 
-  assertEquivalent = (assert, title, vex1, vex2) ->
+  assertEquivalent = (assert, title, idroot, vex1, vex2) ->
+    test_div = $('<div></div>').addClass("testcanvas")
+    test_div.append($('<div></div>').addClass("name").text(title))
+    container = $('<div></div>').css('display', 'flex')
+    oldcanvas = makeCanvas('old', idroot + 'old', '0 0 50%')
+    newcanvas = makeCanvas('new', idroot + 'new', '1')
+    container.append(oldcanvas)
+    container.append(newcanvas)
+    test_div.append(container)
+    $("body").append(test_div)
+
     header = "tabstave\n notes "
     code1 = header + vex1
     code2 = header + vex2
-    renderTest2 assert, title + " old", "oldcode", code1
-    renderTest2 assert, title + " new", "newcode", code1
+    renderTest2 assert, idroot + 'old', code1
+    renderTest2 assert, idroot + 'new', code2
     assert.equal($('#oldcode').html(), $('#newcode').html())
 
 
   @grammarSimplified: (assert) ->
     # assert.expect 3
 
-    assertEquivalent assert, "Can annotate with [ ]", ":q 5/2 $.a>/top.$", ":q 5/2 [.a>/top.]"
-    assertEquivalent assert, "Square bracket annotation can come right after note", ":q 5/2 $.a>/top.$", ":q 5/2[.a>/top.]"
+    assertEquivalent assert, "Can annotate with [ ]", "squarebracks", ":q 5/2 $.a>/top.$", ":q 5/2 [.a>/top.]"
+    assertEquivalent assert, "Square bracket annotation can come right after note", "notebracks", ":q 5/2 $.a>/top.$", ":q 5/2[.a>/top.]"
 
     # Uncomment these once the above is working.
     # assertEquivalent assert, "Single accent", ":q 5/2 $.a>/top.$", ":q 5/2[>:t]"
