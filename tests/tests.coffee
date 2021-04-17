@@ -47,7 +47,7 @@ class VexTabTests
     test "Sweep Strokes", @sweepStrokes
     test "Voices", @voices
     test "Fingering and String Numbers", @fingering
-    test "Grammary - Simplified", @grammarSimplified
+    test "Grammar - Simplified", @grammarSimplified
     test "Render", @render
     test "Render Complex", @renderComplex
     test "Tab Stems", @tabStems
@@ -473,22 +473,37 @@ class VexTabTests
 
     assert.ok(true, "all pass")
 
+
+  # Generate tabular output.
+  makeRenderer2 = (test_name, test_id)->
+    test_div = $('<div></div>').addClass("testcanvas")
+    test_div.append($('<div></div>').addClass("name").text(test_name))
+    canvas = $('<div></div>').addClass("vex-tabdiv").attr('id', test_id)
+    test_div.append(canvas)
+    $("body").append(test_div)
+
+    renderer = new Vex.Flow.Renderer(canvas[0], Vex.Flow.Renderer.Backends.SVG)
+    renderer.getContext().setBackgroundFillStyle("#eed")
+    return renderer
+
+  renderTest2 = (assert, title, divid, code) ->
+    tab = new VexTab(new Artist(0, 0, 200, {scale: 0.8}))
+    renderer = makeRenderer2(title, divid)
+    assert.notEqual null, tab.parse(code)
+    tab.getArtist().render(renderer)
+    assert.ok(true, "all pass")
+
   assertEquivalent = (assert, title, vex1, vex2) ->
-    oldmax = QUnit.dump.maxDepth
-    QUnit.dump.maxDepth = 10
     header = "tabstave\n notes "
-    tab1 = makeParser()
-    ret1 = QUnit.dump.parse(tab1.parse(header + vex1))
-    console.log( QUnit.dump.parse( ret1 ) )
-    tab2 = makeParser()
-    ret2 = QUnit.dump.parse(tab2.parse(header + vex2))
-    QUnit.dump.maxDepth = oldmax
-    assert.equal ret1, ret2, title
+    code1 = header + vex1
+    code2 = header + vex2
+    renderTest2 assert, title + " old", "oldcode", code1
+    renderTest2 assert, title + " new", "newcode", code1
+    assert.equal($('#oldcode').html(), $('#newcode').html())
+
 
   @grammarSimplified: (assert) ->
-    assert.expect 3
-    tab = makeParser()
-
+    # assert.expect 3
 
     assertEquivalent assert, "Can annotate with [ ]", ":q 5/2 $.a>/top.$", ":q 5/2 [.a>/top.]"
     assertEquivalent assert, "Square bracket annotation can come right after note", ":q 5/2 $.a>/top.$", ":q 5/2[.a>/top.]"

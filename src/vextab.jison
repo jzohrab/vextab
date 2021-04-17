@@ -285,7 +285,7 @@ bar
   ;
 
 line
-  : frets maybe_decorator '/' string
+  : frets maybe_decorator '/' string maybe_simpleannotations
     {
       _.extend(_.last($1), {decorator: $2})
       _.each($1, function(fret) { fret['string'] = $4 })
@@ -394,6 +394,11 @@ maybe_decorator
   | 'V' { $$ = 'V' }  // harsh vibrato
   | 'u' { $$ = 'u' }  // up stroke/bow
   | 'd' { $$ = 'd' }  // down stroke/bow
+  |     { $$ = null }
+  ;
+
+maybe_simpleannotations
+  : '[' annotations ']' { $$ = $2 }
   |     { $$ = null }
   ;
 
