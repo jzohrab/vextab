@@ -480,17 +480,12 @@ class VexTabTests
     c.append(canvas)
     return c
 
-  # Generate tabular output.
-  makeRenderer2 = (canvasid)->
+  renderCodeInCanvasId = (code, canvasid) ->
+    tab = new VexTab(new Artist(0, 0, 200, {scale: 0.8}))
+    tab.parse(code)
     canvas = $('#' + canvasid)
     renderer = new Vex.Flow.Renderer(canvas[0], Vex.Flow.Renderer.Backends.SVG)
     renderer.getContext().setBackgroundFillStyle("#eed")
-    return renderer
-
-  renderTest2 = (assert, canvasid, code) ->
-    tab = new VexTab(new Artist(0, 0, 200, {scale: 0.8}))
-    renderer = makeRenderer2(canvasid)
-    assert.notEqual null, tab.parse(code)
     tab.getArtist().render(renderer)
 
 
@@ -499,22 +494,21 @@ class VexTabTests
 
   assertEquivalent = (assert, title, vex1, vex2) ->
     idcounter += 1
+    oldid = 'simpleold' + idcounter
+    newid = 'simplenew' + idcounter
+
     test_div = $('<div></div>').addClass("testcanvas")
     test_div.append($('<div></div>').addClass("name").text(title))
     container = $('<div></div>').css('display', 'flex')
-    oldcanvas = makeCanvas('old', 'simpleold' + idcounter, '0 0 50%')
-    newcanvas = makeCanvas('new', 'simplenew' + idcounter, '1')
-    container.append(oldcanvas)
-    container.append(newcanvas)
+    container.append(makeCanvas('old', oldid, '0 0 50%'))
+    container.append(makeCanvas('new', newid, '1'))
     test_div.append(container)
     $("body").append(test_div)
 
     header = "tabstave\n notes "
-    code1 = header + vex1
-    code2 = header + vex2
-    renderTest2 assert, 'simpleold' + idcounter, code1
-    renderTest2 assert, 'simplenew' + idcounter, code2
-    assert.equal($('#simpleold' + idcounter).html(), $('#simplenew' + idcounter).html())
+    renderCodeInCanvasId header + vex1, oldid
+    renderCodeInCanvasId header + vex2, newid
+    assert.equal($('#' + oldid).html(), $('#' + newid).html())
 
 
   @grammarSimplified: (assert) ->
@@ -533,7 +527,6 @@ class VexTabTests
     # assert.equal tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:l:f:1.$"), tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:l:f:1.$")
     # assert.equal tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:r:s:1.$"), tab.parse("tabstave\n notes :q (5/2.5/3.7/4) $.fingering/0:r:s:1.$")
 
-    assert.ok(true, "all pass")
 
   @render: (assert) ->
     tab = makeParser()
