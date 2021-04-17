@@ -493,12 +493,17 @@ class VexTabTests
     assert.notEqual null, tab.parse(code)
     tab.getArtist().render(renderer)
 
-  assertEquivalent = (assert, title, idroot, vex1, vex2) ->
+
+  # ID counter for the equivalence tests
+  idcounter = 0
+
+  assertEquivalent = (assert, title, vex1, vex2) ->
+    idcounter += 1
     test_div = $('<div></div>').addClass("testcanvas")
     test_div.append($('<div></div>').addClass("name").text(title))
     container = $('<div></div>').css('display', 'flex')
-    oldcanvas = makeCanvas('old', idroot + 'old', '0 0 50%')
-    newcanvas = makeCanvas('new', idroot + 'new', '1')
+    oldcanvas = makeCanvas('old', 'simpleold' + idcounter, '0 0 50%')
+    newcanvas = makeCanvas('new', 'simplenew' + idcounter, '1')
     container.append(oldcanvas)
     container.append(newcanvas)
     test_div.append(container)
@@ -507,16 +512,16 @@ class VexTabTests
     header = "tabstave\n notes "
     code1 = header + vex1
     code2 = header + vex2
-    renderTest2 assert, idroot + 'old', code1
-    renderTest2 assert, idroot + 'new', code2
-    assert.equal($('#oldcode').html(), $('#newcode').html())
+    renderTest2 assert, 'simpleold' + idcounter, code1
+    renderTest2 assert, 'simplenew' + idcounter, code2
+    assert.equal($('#simpleold' + idcounter).html(), $('#simplenew' + idcounter).html())
 
 
   @grammarSimplified: (assert) ->
     # assert.expect 3
 
-    assertEquivalent assert, "Can annotate with [ ]", "squarebracks", ":q 5/2 $.a>/top.$", ":q 5/2 [.a>/top.]"
-    assertEquivalent assert, "Square bracket annotation can come right after note", "notebracks", ":q 5/2 $.a>/top.$", ":q 5/2[.a>/top.]"
+    assertEquivalent assert, "Can annotate with [ ]", ":q 5/2 $.a>/top.$", ":q 5/2 [.a>/top.]"
+    assertEquivalent assert, "Square bracket annotation can come right after note", ":q 5/2 $.a>/top.$", ":q 5/2[.a>/top.]"
 
     # Uncomment these once the above is working.
     # assertEquivalent assert, "Single accent", ":q 5/2 $.a>/top.$", ":q 5/2[>:t]"
