@@ -474,8 +474,9 @@ class VexTabTests
     assert.ok(true, "all pass")
 
 
-  makeCanvas = (heading, test_id, flex)->
+  makeCanvas = (heading, vex, test_id, flex)->
     c = $('<div></div>').addClass("name").text(heading).css('flex', flex)
+    c.append($('<pre></pre>').text('"' + vex + '"').css('font-size', '0.8em'))
     canvas = $('<div></div>').addClass("vex-tabdiv").attr('id', test_id).css('flex', flex)
     c.append(canvas)
     return c
@@ -492,7 +493,7 @@ class VexTabTests
   getRenderedContent = (container, code, title, cssflex) ->
     idcounter += 1
     canvasid = 'simplified-' + idcounter
-    container.append(makeCanvas(title, canvasid, cssflex))
+    container.append(makeCanvas(title, code, canvasid, cssflex))
     header = "tabstave\n notes "
     renderCodeInCanvasId(header + code, canvasid)
     return $('#' + canvasid).html()
