@@ -523,8 +523,8 @@ class VexTabTests
   @grammarSimplified: (assert) ->
     # Tests are given as [ original vextab, simplified vextab, title ].
     tests = [
-      [ ':q 5/2 $.a>/top.$', ':q 5/2 [.a>/top.]', 'Can annotate with [ ]' ],
-      [ ':q 5/2 $.a>/top.$', ':q 5/2[.a>/top.]',  'Square bracket annotation can come right after note' ]
+      # [ ':q 5/2 $.a>/top.$', ':q 5/2 [.a>/top.]', 'Can annotate with [ ]' ],
+      # [ ':q 5/2 $.a>/top.$', ':q 5/2[.a>/top.]',  'Square bracket annotation can come right after note' ]
       [ ':q 5/2 $.fingering/1:r:f:2.$', ':q 5/2[f:2:r]', 'Single note with fingering' ]
     ]
 

@@ -24,8 +24,8 @@
 
 
 /* Annotations */
-<notes>[$,\[]                { this.begin('annotations'); return "$" }
-<annotations>[$,\]]          { this.begin('notes'); return "$" }
+<notes>[$]                { this.begin('annotations'); return "$" }
+<annotations>[$]          { this.begin('notes'); return "$" }
 <annotations>[^,$\]]+       return 'WORD'
 
 /* Commands */
