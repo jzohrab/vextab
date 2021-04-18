@@ -488,27 +488,29 @@ class VexTabTests
     renderer.getContext().setBackgroundFillStyle("#eed")
     tab.getArtist().render(renderer)
 
+  # Render content to a new div, and return the content.
+  getRenderedContent = (container, code, title, cssflex) ->
+    idcounter += 1
+    canvasid = 'simplified-' + idcounter
+    container.append(makeCanvas(title, canvasid, cssflex))
+    header = "tabstave\n notes "
+    renderCodeInCanvasId(header + code, canvasid)
+    return $('#' + canvasid).html()
 
   # ID counter for the equivalence tests
   idcounter = 0
 
   assertEquivalent = (assert, title, vex1, vex2) ->
-    idcounter += 1
-    oldid = 'simpleold' + idcounter
-    newid = 'simplenew' + idcounter
-
     test_div = $('<div></div>').addClass("testcanvas")
     test_div.append($('<div></div>').addClass("name").text(title))
     container = $('<div></div>').css('display', 'flex')
-    container.append(makeCanvas('old', oldid, '0 0 50%'))
-    container.append(makeCanvas('new', newid, '1'))
     test_div.append(container)
     $("body").append(test_div)
 
     header = "tabstave\n notes "
-    renderCodeInCanvasId header + vex1, oldid
-    renderCodeInCanvasId header + vex2, newid
-    assert.equal($('#' + oldid).html(), $('#' + newid).html())
+    oldhtml = getRenderedContent(container, vex1, 'original vextab', '0 0 30%')
+    newhtml = getRenderedContent(container, vex2, 'simplified vextab (equivalent)', '1')
+    assert.equal(oldhtml, newhtml, title)
 
 
   @grammarSimplified: (assert) ->
