@@ -475,8 +475,10 @@ class VexTabTests
 
 
   makeCanvas = (heading, vex, test_id, flex)->
-    c = $('<div></div>').addClass("name").text(heading).css('flex', flex)
-    c.append($('<pre></pre>').text('"' + vex + '"').css('font-size', '0.8em'))
+    c = $('<div></div>').css('flex', flex).css('font-size', '0.8em')
+    p = $('<p></p>').text(heading + ': ').css('margin-top', '0px')
+    p.append($('<span></span>').text('"' + vex + '"').css('font-family', 'courier'))
+    c.append(p)
     canvas = $('<div></div>').addClass("vex-tabdiv").attr('id', test_id).css('flex', flex)
     c.append(canvas)
     return c
@@ -509,8 +511,8 @@ class VexTabTests
     $("body").append(test_div)
 
     header = "tabstave\n notes "
-    oldhtml = getRenderedContent(container, vex1, 'original vextab', '0 0 30%')
-    newhtml = getRenderedContent(container, vex2, 'simplified vextab (equivalent)', '1')
+    oldhtml = getRenderedContent(container, vex1, 'original', '0 0 30%')
+    newhtml = getRenderedContent(container, vex2, 'simplified', '1')
     assert.equal(oldhtml, newhtml, title)
 
 
