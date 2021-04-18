@@ -398,8 +398,12 @@ maybe_decorator
   ;
 
 maybe_simpleannotations
-  : '[' annotations ']' { $$ = $2 }
+  : '[' simplefingering ']' { $$ = $2 }
   |     { $$ = null }
+  ;
+
+simplefingering
+  : 'f:' NUMBER ':' WORD { $$ = {annotations: ".fingering/1:$4:$2." } }
   ;
 
 tuplets
