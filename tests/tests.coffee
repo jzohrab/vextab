@@ -492,13 +492,17 @@ class VexTabTests
     tab.getArtist().render(renderer)
 
   # Render content to a new div, and return the content.
+  # Remove some things that change but aren't relevant (IDs)
   getRenderedContent = (container, code, title, cssflex) ->
     idcounter += 1
     canvasid = 'simplified-' + idcounter
-    container.append(makeCanvas(title, code, canvasid, cssflex))
-    header = "tabstave\n notes "
+    header = "tabstave notation=true \n notes "
+    container.append(makeCanvas(title, header + code, canvasid, cssflex))
     renderCodeInCanvasId(header + code, canvasid)
-    return $('#' + canvasid).html()
+    content = $('#' + canvasid).
+      html().
+      replace(/id=\".*?\"/g, 'id="xxx"')
+    return content
 
   # ID counter for the equivalence tests
   idcounter = 0
@@ -510,7 +514,7 @@ class VexTabTests
     test_div.append(container)
     $("body").append(test_div)
 
-    header = "tabstave\n notes "
+    header = "tabstave notation=true\n notes "
     oldhtml = getRenderedContent(container, vex1, 'original', '0 0 30%')
     newhtml = getRenderedContent(container, vex2, 'simplified', '1')
     assert.equal(oldhtml, newhtml, title)
