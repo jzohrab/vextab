@@ -514,10 +514,14 @@ class VexTabTests
 
 
   @grammarSimplified: (assert) ->
-    # assert.expect 3
+    # Tests are given as [ original vextab, simplified vextab, title ].
+    tests = [
+      [ ':q 5/2 $.a>/top.$', ':q 5/2 [.a>/top.]', 'Can annotate with [ ]' ],
+      [ ':q 5/2 $.a>/top.$', ':q 5/2[.a>/top.]',  'Square bracket annotation can come right after note' ]
+    ]
 
-    assertEquivalent assert, "Can annotate with [ ]", ":q 5/2 $.a>/top.$", ":q 5/2 [.a>/top.]"
-    assertEquivalent assert, "Square bracket annotation can come right after note", ":q 5/2 $.a>/top.$", ":q 5/2[.a>/top.]"
+    assert.expect tests.length
+    assertEquivalent(assert, t[2], t[0], t[1]) for t in tests
 
     # Uncomment these once the above is working.
     # assertEquivalent assert, "Single accent", ":q 5/2 $.a>/top.$", ":q 5/2[>:t]"
