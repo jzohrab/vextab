@@ -528,39 +528,6 @@ class VexTabTests
     assert.ok(true, "all pass")
 
 
-  makeCanvas = (heading, vex, test_id, flex)->
-    c = $('<div></div>').css('flex', flex).css('font-size', '0.8em')
-    p = $('<p></p>').text(heading + ': ').css('margin-top', '0px')
-    p.append($('<span></span>').text('"' + vex + '"').css('font-family', 'courier'))
-    c.append(p)
-    canvas = $('<div></div>').addClass("vex-tabdiv").attr('id', test_id).css('flex', flex)
-    c.append(canvas)
-    return c
-
-  renderCodeInCanvasId = (code, canvasid) ->
-    tab = new VexTab(new Artist(0, 0, 200, {scale: 0.8}))
-    tab.parse(code)
-    canvas = $('#' + canvasid)
-    renderer = new Vex.Flow.Renderer(canvas[0], Vex.Flow.Renderer.Backends.SVG)
-    renderer.getContext().setBackgroundFillStyle("#eed")
-    tab.getArtist().render(renderer)
-
-  # Render content to a new div, and return the content.
-  # Remove some things that change but aren't relevant (IDs)
-  getRenderedContent = (container, code, title, cssflex) ->
-    idcounter += 1
-    canvasid = 'simplified-' + idcounter
-    header = "tabstave notation=true \n notes "
-    container.append(makeCanvas(title, header + code, canvasid, cssflex))
-    renderCodeInCanvasId(header + code, canvasid)
-    content = $('#' + canvasid).
-      html().
-      replace(/id=\".*?\"/g, 'id="xxx"')
-    return content
-
-  # ID counter for the equivalence tests
-  idcounter = 0
-
   assertEquivalent = (assert, title, vex1, vex2) ->
     test_div = $('<div></div>').addClass("testcanvas")
     test_div.append($('<div></div>').addClass("name").text(title))
