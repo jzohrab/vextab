@@ -20,4 +20,14 @@ git log upstream/master..HEAD --pretty=format:"* %as - %s" --reverse
 
 ```
 * 2021-04-24 - Change README for patched branch.
+* 2021-04-24 - Don't render vexflow logo.
 ```
+
+
+## Building
+
+```
+npm run build
+```
+
+will create new files in `dist`.

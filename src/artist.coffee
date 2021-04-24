@@ -12,7 +12,7 @@ class Artist
   @DEBUG = false
   L = (args...) -> console?.log("(Vex.Flow.Artist)", args...) if Artist.DEBUG
 
-  @NOLOGO = false
+  @NOLOGO = true
 
   constructor: (@x, @y, @width, options) ->
     @options =
@@ -254,13 +254,13 @@ class Artist
         @player.removeControls()
     @rendered = true
 
-    unless Artist.NOLOGO
-      LOGO = "vexflow.com"
-      width = ctx.measureText(LOGO).width
-      ctx.save()
-      ctx.setFont("Times", 10, "italic")
-      ctx.fillText(LOGO, (@customizations.width - width) / 2, @last_y + 25)
-      ctx.restore()
+    # unless Artist.NOLOGO
+    #   LOGO = "vexflow.com"
+    #   width = ctx.measureText(LOGO).width
+    #   ctx.save()
+    #   ctx.setFont("Times", 10, "italic")
+    #   ctx.fillText(LOGO, (@customizations.width - width) / 2, @last_y + 25)
+    #   ctx.restore()
 
   isRendered: -> @rendered
 
